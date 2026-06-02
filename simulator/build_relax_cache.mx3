@@ -1,0 +1,45 @@
+// build_relax_cache.mx3 -- one-time relaxed equilibrium state for the SWRC
+// spin-wave-disk reservoir. The output (M_Relax_Initial.ovf) is reused via
+// m.LoadFile() by every sweep sample so per-sample setup stays cheap.
+//
+// Geometry/material match test_sample.mx3 and the templates embedded in
+// run_sweep.py. The full parameter table -- including the physical
+// interpretation of each value and the VCMA convention -- is in GEOMETRY.md.
+// Output: build_relax_cache.out/M_Relax_Initial.ovf
+
+// ---- Discretisation: 512 x 512 x 1 cells, 2 nm x 2 nm x 1.5 nm each --------
+setgridsize(512, 512, 1)
+setcellsize(2e-9, 2e-9, 1.5e-9)
+
+// ---- Geometry: 1 um circular disk, single z-layer --------------------------
+disk := circle(1000e-9)
+setgeom(disk)
+defregion(0, disk)
+
+// ---- Magnetic material (CoFeB-like, perpendicular anisotropy) --------------
+Msat = 1e6                    // saturation magnetisation, A/m
+Aex = 1.5e-11                 // exchange stiffness, J/m
+alpha = 0.012                 // Gilbert damping (dimensionless)
+DisableZhangLiTorque = true   // VCMA drive only -- no spin-transfer torques
+anisU = vector(0, 0, 1)       // easy axis = out-of-plane
+Ku1 = 6.3e5                   // static first-order uniaxial anisotropy, J/m^3
+                              // (chosen just above the spin-reorientation transition;
+                              //  see GEOMETRY.md -> Magnetic material)
+
+// ---- Actuator regions: (num_inputs + 1) * 2 = 6 evenly around the disk -----
+// 2 are driven inputs (defined per sample in test_sample.mx3 / run_sweep.py);
+// the remaining 4 are unused but defined so the grid symmetry matches the
+// experimental device layout (up to 6 active electrodes).
+num_inputs := 2
+num_transducers := (num_inputs + 1) * 2
+base_actuator := circle(5e-08).transl(300e-9, 0, 0)   // 50 nm circle, 300 nm radial offset
+for i := 0; i < num_transducers; i++ {
+    defregion(i+1, base_actuator.rotz(2*Pi*i/num_transducers))
+}
+
+// ---- Initialise magnetisation + relax to equilibrium -----------------------
+m = uniform(0, 0.01, 1)       // nearly out-of-plane initial state
+for i := 0; i < num_transducers+1; i++ { Ku1.setRegion(i, 6.3e5) }
+B_ext = vector(0.045, 0, 0)   // 45 mT in-plane (+x) bias, tilts equilibrium for spin-wave dispersion
+relax()
+saveas(m, "M_Relax_Initial")

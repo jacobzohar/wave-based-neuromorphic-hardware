@@ -1,0 +1,32 @@
+# Python dependencies for the SWRC reproducibility package.
+# Pinned to the versions used to produce the published results.
+#
+# Install into a fresh virtual environment:
+#     python -m venv .venv && . .venv/bin/activate   # (Windows: .venv\Scripts\activate)
+#     pip install -r requirements.txt
+#
+# ----------------------------------------------------------------------------
+# experiments/kernel_rank_cg
+# ----------------------------------------------------------------------------
+# Compute stage  (kernel_rank_cg.py, spatial_rank_per_frame.py; tested on Linux):
+numpy==2.2.6
+opencv-python==4.12.0
+# Figure stage  (make_figures.py, make_fig_s91.py, make_fig_spatial.py):
+#   numpy as above (figure scripts also verified under numpy 2.4.2), plus:
+matplotlib==3.10.8
+# Supplementary-table .docx builder  (build_docx_s91.py; OPTIONAL, Windows + MS Office only):
+lxml==6.1.0
+latex2mathml==3.81.0
+python-docx==1.2.0
+#
+# ----------------------------------------------------------------------------
+# experiments/xor_checkerboard  (append any additional deps below)
+# ----------------------------------------------------------------------------
+# Imports across the included scripts: numpy, scikit-learn, torch, matplotlib only.
+# Verified on Python 3.13.13. Code is compatible with the numpy==2.2.6 pin
+# above (figure + sweeps also verified under numpy 2.4.2).
+# Feed-forward sweeps (run_mlp_sweep_xor.py, run_cnn_sweep_xor.py, run_ext_sweep_xor.py):
+torch==2.11.0            # CPU build sufficient; published runs were CPU
+# SWR readout (top_k_svm_sweep.py, build_xor_pixel_mi.py) + figure:
+scikit-learn==1.8.0
+# matplotlib==3.10.8 already pinned in the kernel_rank_cg block above (figure stage).

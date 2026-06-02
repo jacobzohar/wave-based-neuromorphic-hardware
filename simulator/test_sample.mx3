@@ -1,0 +1,69 @@
+// test_sample.mx3 -- ONE sample of a 32 x 32 SWRC sweep (for timing or
+// debugging a single input pair). Coords X1 = 20, X2 = 12 with T_step = 0.1 ns
+// give pulse centres at 20 * 0.1 + 0.2 = 2.2 ns (transducer 1) and
+// 12 * 0.1 + 0.2 = 1.4 ns (transducer 2).
+//
+// Tmax = 6 ns: 32 levels * 0.1 ns = 3.2 ns full encoding window + ~2.7 ns
+// ringdown after the latest possible pulse (X = 31). 6.5 ns would be marginally
+// cleaner -- 5% pulse-amplitude truncated at the cut for X = 31 -- but 6 ns is
+// what these test runs used.
+//
+// Single z-layer, 2 nm cells, same SWRC geometry / material as
+// build_relax_cache.mx3 + run_sweep.py. m_z (full 512 x 512 x 1 field) and
+// the 6-output-region table are saved every 100 * FixDt = 20 ps, giving
+// Tmax / 20 ps + 1 = 301 frames at Tmax = 6 ns.
+//
+// Loads the relaxed state from build_relax_cache.out/ (run build_relax_cache.mx3 first).
+// For the full sweep: build the cache once, then run GRID^2 of these (one per
+// (X1, X2) pair) -- run_sweep.py automates that, including the multi-GPU split.
+//
+// Full parameter table + VCMA convention: GEOMETRY.md
+
+// ---- Discretisation + geometry (must match build_relax_cache.mx3) ----------
+setgridsize(512, 512, 1)
+setcellsize(2e-9, 2e-9, 1.5e-9)
+
+disk := circle(1000e-9)
+setgeom(disk)
+defregion(0, disk)
+
+// ---- Magnetic material -----------------------------------------------------
+Msat = 1e6                    // saturation magnetisation, A/m
+Aex = 1.5e-11                 // exchange stiffness, J/m
+alpha = 0.012                 // Gilbert damping
+DisableZhangLiTorque = true   // VCMA drive only
+anisU = vector(0, 0, 1)       // easy axis out-of-plane
+Ku1 = 6.3e5                   // static perpendicular anisotropy, J/m^3 (just above SRT)
+
+// ---- Actuator regions ------------------------------------------------------
+num_inputs := 2
+num_transducers := (num_inputs + 1) * 2
+base_actuator := circle(5e-08).transl(300e-9, 0, 0)   // 50 nm radius, 300 nm radial offset
+for i := 0; i < num_transducers; i++ {
+    defregion(i+1, base_actuator.rotz(2*Pi*i/num_transducers))
+}
+for i := 0; i < num_transducers+1; i++ { Ku1.setRegion(i, 6.3e5) }
+
+B_ext = vector(0.045, 0, 0)   // 45 mT in-plane (+x) bias
+m.LoadFile("relax_init.ovf")  // copy build_relax_cache.out/M_Relax_Initial.ovf here first
+
+// ---- Solver + output cadence -----------------------------------------------
+FixDt = 2e-13                 // fixed integration step, ~250 steps per 800 MHz period
+Tmax := 6e-9                  // total simulation window per sample
+tableautosave(100 * FixDt)    // table snapshot every 20 ps
+autosave(m.Comp(2), 100*FixDt) // m_z field snapshot every 20 ps -> 301 frames
+
+// ---- Drive parameters ------------------------------------------------------
+Amplitude := 800000.0         // 8e5 J/m^3 peak dynamic Ku1 modulation (VCMA-equivalent; see GEOMETRY.md)
+frequency := 800000000.0      // 800 MHz RF carrier
+pulsewidth := 1.25e-9         // Gaussian 1/e half-width, s
+
+// ---- Apply the two input pulses --------------------------------------------
+// Each input drives one actuator region with a Gaussian-windowed RF burst
+// centred at (coord * T_step + 0.2 ns offset).
+// X1 = 20  ->  delay 2.0 ns
+Ku1.setRegion(1, Amplitude*exp(-((t-2.0e-9-0.2e-9)/pulsewidth)*((t-2.0e-9-0.2e-9)/pulsewidth))*sin(2*pi*frequency*(t-2.0e-9-0.2e-9)))
+// X2 = 12  ->  delay 1.2 ns
+Ku1.setRegion(2, Amplitude*exp(-((t-1.2e-9-0.2e-9)/pulsewidth)*((t-1.2e-9-0.2e-9)/pulsewidth))*sin(2*pi*frequency*(t-1.2e-9-0.2e-9)))
+
+run(Tmax)

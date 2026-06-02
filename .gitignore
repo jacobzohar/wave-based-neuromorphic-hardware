@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Large mumax³ intermediates / external data cubes (regenerable; see READMEs)
+*.ovf
+*_mz_cube.npy
+sweep_out/
+relax_sw_disk_*.ovf
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

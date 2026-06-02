@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-05-15 16:21:28",
+  "topk_16_drives": [
+    "15mT1100",
+    "15mT200",
+    "30mT500",
+    "45mT",
+    "60mT"
+  ],
+  "topk_32_drives": [
+    "45mT_t05"
+  ],
+  "n_summary_rows": 825,
+  "mlp_loaded": true,
+  "cnn_loaded": true
+}
