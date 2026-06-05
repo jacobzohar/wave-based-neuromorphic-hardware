@@ -1,4 +1,4 @@
-# Python dependencies for the SWRC reproducibility package.
+# Python dependencies for the SWRC simulator + analyses.
 # Pinned to the versions used to produce the published results.
 #
 # Install into a fresh virtual environment:

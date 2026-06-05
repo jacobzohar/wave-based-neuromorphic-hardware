@@ -1,6 +1,6 @@
 # `experiments/` — downstream analyses
 
-Each subfolder is a self-contained reproducibility package for one figure (or
+Each subfolder is a self-contained analysis bundle for one figure (or
 figure group) of the manuscript. They all sit on top of the SWRC simulator in
 [`../simulator/`](../simulator/) — every analysis consumes an `m_z` cube
 produced by that simulator and reports a classification or dimensionality

@@ -5,14 +5,17 @@ a 1 µm circular magnetic disk driven by RF pulses through actuator regions, use
 as the nonlinear feature map of a physical reservoir computer. This repository
 contains the simulator, a minimal worked example that runs end-to-end on a
 single GPU, a tutorial walkthrough, and the analyses that back
-**`<manuscript title — TO FILL>`** (`<journal — TO FILL>`,
-`<authors — TO FILL>`).
+**"Autonomous robotic operation controlled by wave-based neuromorphic hardware"**
+(*Nature Communications*; Jacob Zohar, Daniele Pinna, Gerrit van der Laan,
+Thorsten Hesjedal, C. K. Safeer).
 
 ## Layout
 
 ```
 SWRC/
 ├── README.md                ← this file
+├── LICENSE                  ← MIT license
+├── PSEUDOCODE.md            ← formal algorithm specification (the four pipeline stages)
 ├── requirements.txt         ← pinned Python dependencies
 ├── simulator/               ← THE simulator — mumax³ code + sweep driver + cube assembler
 │   ├── README.md
@@ -71,23 +74,31 @@ Expected output: leave-one-out balanced accuracy on the 4 samples (typically
 [`examples/minimal_classification/README.md`](examples/minimal_classification/README.md)
 for prerequisites and a full description of the expected output.
 
-## Setup
+## System requirements
 
-### Software requirements
+**Tested on:** Ubuntu 22.04 LTS (simulator + analysis compute stages) and
+Windows 11 (figure regeneration + supplementary-table `.docx` builder), under
+Python 3.13.13 with the dependency versions pinned in
+[`requirements.txt`](requirements.txt). The figure-regeneration stage is also
+verified under numpy 2.4.2.
 
 | Component | Version | Notes |
 |-----------|---------|-------|
 | Python | ≥3.10 (tested on 3.13.13) | |
-| MuMax3 | v3.10 (or compatible) | <https://mumax.github.io/>; binary on `PATH` or via `MUMAX3_PATH` env var. Required for any simulator step; not needed to regenerate the figures from the bundled `.npz` caches. |
+| MuMax3 | v3.10 (or compatible) | <https://mumax.github.io/>. Required for any simulator step; not needed to regenerate the figures from the bundled `.npz` caches. Install instructions below. |
 | numpy | 2.2.6 | Figure stage also verified under numpy 2.4.2 |
 | opencv-python | 4.12.0 | Used by the kernel-rank analysis |
 | scikit-learn | 1.8.0 | LinearSVC + cross-validation |
 | torch | 2.11.0 | CPU build sufficient; published MLP/CNN runs were CPU |
 | matplotlib | 3.10.8 | Figure rendering |
 | pandas | (any recent) | Faster CSV reads in `build_cube.py` |
-| GPU | 1 + CUDA-capable (≥RTX 20-series equivalent recommended) | Required only for the simulator. The figure / analysis stages run on CPU. |
+| GPU | 1 × CUDA-capable (≥RTX 20-series equivalent recommended) | Required **only** for the simulator. The figure / analysis stages run on CPU; without a GPU you can still regenerate every manuscript figure from the bundled `.npz` caches — see *Quick smoke test (no GPU)* below. |
 
-### Install
+No other non-standard hardware is required.
+
+## Installation guide
+
+### 1. Python environment (~5 minutes on a normal desktop)
 
 ```bash
 python -m venv .venv
@@ -95,9 +106,44 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-`requirements.txt` is grouped by experiment and by pipeline stage. The compute
-stages were run on Linux (numpy 2.2.6 / OpenCV 4.12); the figure stages also
-run on Windows.
+`requirements.txt` is grouped by experiment and by pipeline stage; the
+compute stages were run on Linux, the figure stages also run on Windows.
+
+### 2. MuMax3 binary (~2 minutes; skip if you only need to regenerate figures)
+
+MuMax3 is required only to run the simulator (Algorithm 1 in
+[`PSEUDOCODE.md`](PSEUDOCODE.md)). To install:
+
+1. Download a v3.10 build for your platform from <https://mumax.github.io/>
+   (Linux: `mumax3.10_linux_cuda12.0.tar.gz`; Windows:
+   `mumax3.10_windows_cuda12.0.zip`).
+2. Extract the archive and either:
+   - place the `mumax3` (Linux) / `mumax3.exe` (Windows) binary on your
+     `PATH`, **or**
+   - set the `MUMAX3_PATH` environment variable to the absolute path of the
+     binary.
+3. Verify with `mumax3 -test` (Linux) or `mumax3.exe -test` (Windows); the
+   binary will print its build info and the CUDA device it sees.
+
+**Typical total install time on a normal desktop computer:** ~7 minutes
+(≈5 min Python env over broadband + ≈2 min mumax3 download), assuming a
+working CUDA driver.
+
+### 3. Quick smoke test (no GPU, ~5 seconds)
+
+If you do not have a GPU, you can still confirm the install end-to-end by
+regenerating Supplementary Figure 7 from the bundled `.npz` caches:
+
+```bash
+cd experiments/xor_checkerboard
+python make_xor_comparison_figure.py
+# -> figures/figS7_xor_ladder_comparison.png
+```
+
+This runs entirely on CPU in a few seconds and exercises numpy, scikit-learn,
+and matplotlib without invoking mumax3. The GPU-based minimal example in the
+next section is the full-pipeline smoke test for users who also want to
+exercise the simulator.
 
 ## Reproducing the manuscript figures
 
@@ -126,8 +172,8 @@ simulator — every cube was generated by [`simulator/run_sweep.py`](simulator/r
 documented in [`simulator/GEOMETRY.md`](simulator/GEOMETRY.md). The
 precomputed `.npz` result caches **are** bundled in each experiment folder,
 so every published figure regenerates without the raw cubes. The cubes
-themselves are
-`<TO FILL: data repository / DOI or "available from the corresponding author on reasonable request">`.
+themselves are available from the corresponding author
+(safeer.chenattukuzhiyil@physics.ox.ac.uk) on reasonable request.
 
 ## Experiments
 
@@ -152,5 +198,22 @@ ratio of the spin-wave reservoir feature matrix Ψc as the `m_z` field is
 spatially coarse-grained from 50×50 down to 4×4. Generates **Supplementary
 Table 2 / Table S9.1** and **Fig. S9.2** (plus a display panel for the
 narrative discussion in Section S9.1).
+
+## Code description / pseudocode
+
+A formal, language-agnostic specification of the four pipeline stages — the
+substrate simulation sweep, the cube assembler, the top-`K` mutual-information
++ LinearSVC readout, and the kernel-rank / d95 / participation-ratio analysis —
+is in [`PSEUDOCODE.md`](PSEUDOCODE.md). Each algorithm block is paired with a
+pointer to the canonical Python/mumax³ implementation in this repository.
+
+## License
+
+This software is released under the MIT License — see [`LICENSE`](LICENSE) for
+the full text. The MIT License is an
+[Open Source Initiative–approved](https://opensource.org/licenses/MIT)
+permissive licence: users may use, copy, modify, redistribute, and incorporate
+the code in derivative works (including closed-source ones), subject only to
+preservation of the copyright notice and the licence text.
 
 ---
