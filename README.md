@@ -17,6 +17,8 @@ SWRC/
 ├── LICENSE                  ← MIT license
 ├── PSEUDOCODE.md            ← formal algorithm specification (the four pipeline stages)
 ├── requirements.txt         ← pinned Python dependencies
+├── datasets/                ← input-dataset generators
+│   └── water_wave_obstacle/      ← balanced random distance-reading generators (2/3/5-class)
 ├── simulator/               ← THE simulator — mumax³ code + sweep driver + cube assembler
 │   ├── README.md
 │   ├── GEOMETRY.md          ← canonical parameter table (incl. VCMA convention)
@@ -198,6 +200,16 @@ ratio of the spin-wave reservoir feature matrix Ψc as the `m_z` field is
 spatially coarse-grained from 50×50 down to 4×4. Generates **Supplementary
 Table 2 / Table S9.1** and **Fig. S9.2** (plus a display panel for the
 narrative discussion in Section S9.1).
+
+## Datasets
+
+### [`datasets/water_wave_obstacle/`](datasets/water_wave_obstacle/) — water-wave reservoir obstacle-distance generators
+Balanced random-dataset generators for the water-wave reservoir's
+obstacle-classification task (Fig. 2e and Fig. 5b in the main text). Three
+variants — 2-, 3- and 5-class — share the same six-sensor encoding: each
+sample is a 6-tuple of integer distance readings, mapped (in the physical
+experiment) to the wave initiation times that drive the six actuators. See
+the folder README for the encoding, class definitions, and usage.
 
 ## Code description / pseudocode
 
