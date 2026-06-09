@@ -7,7 +7,7 @@ records the out-of-plane magnetisation `m_z(t)` of the disk, and produces a
 `(N_samples, T, H, W)` float32 cube that the downstream analyses consume.
 
 The substrate is **task-agnostic** — the same cube is reused for every
-classification / dimensionality experiment in `../experiments/`. If you only
+classification / dimensionality experiment in `../Demo/`. If you only
 want a 200-line introduction to the simulator before reading the production
 code, start with [`../tutorial/SWRC_MuMax3.ipynb`](../tutorial/SWRC_MuMax3.ipynb).
 
@@ -62,10 +62,10 @@ Python `numpy` (and `pandas` for faster CSV reads in `build_cube.py`).
 
 ## Where the cubes go
 
-The cubes produced here feed the analyses in `../experiments/`:
+The cubes produced here feed the analyses in `../Demo/`:
 
-- [`../experiments/xor_checkerboard/`](../experiments/xor_checkerboard/) — top-K MI feature selection + LinearSVC readout, compared against MLP / CNN baselines on an XOR-checkerboard task ladder.
-- [`../experiments/kernel_rank_cg/`](../experiments/kernel_rank_cg/) — kernel rank, d95 and participation ratio of the reservoir feature matrix vs spatial coarse-graining.
+- [`../Demo/xor_checkerboard/`](../Demo/xor_checkerboard/) — top-K MI feature selection + LinearSVC readout, compared against MLP / CNN baselines on an XOR-checkerboard task ladder.
+- [`../Demo/kernel_rank_cg/`](../Demo/kernel_rank_cg/) — kernel rank, d95 and participation ratio of the reservoir feature matrix vs spatial coarse-graining.
 
 The cubes themselves are multi-GB and are not bundled — see *Data
 availability* in the top-level [`../README.md`](../README.md).
