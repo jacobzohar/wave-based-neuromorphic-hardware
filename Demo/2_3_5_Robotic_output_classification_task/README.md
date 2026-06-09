@@ -83,7 +83,7 @@ modulation pulse at every input transducer, with the pulse centre time
 of transducer *k* set to `distance_reading[k] * T_step + t_off`.
 
 For one sample, the call into the simulator is the same as for the
-XOR-checkerboard example, but with `num_inputs = 6` (one input per
+XOR-chequerboard example, but with `num_inputs = 6` (one input per
 sensor reading) instead of the default `num_inputs = 2`. The
 parameters used for the manuscript runs (RCT9 sweep, 1000 samples
 per variant):

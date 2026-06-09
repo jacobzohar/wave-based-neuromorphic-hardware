@@ -72,7 +72,7 @@ as the substrate dynamics span the encoding window.)
 This is a *minimal* example to demonstrate end-to-end pipeline correctness,
 not a meaningful benchmark. The 4-sample LOO-CV result has no statistical
 power; for the production-scale results (32×32 = 1024 samples with 5×3 repeated
-stratified k-fold CV), see [`../../Demo/xor_checkerboard/`](../../Demo/xor_checkerboard/).
+stratified k-fold CV), see [`../../Demo/reservoir_metrics/xor_chequerboard/`](../../Demo/reservoir_metrics/xor_chequerboard/).
 
 ## Files
 

@@ -50,7 +50,7 @@ EPOCHS     = 400
 EVAL_EVERY = 5
 LR         = 1e-3
 
-# Input: 2-D (x, y) pixel coordinate. Output: 2-class XOR-checkerboard label.
+# Input: 2-D (x, y) pixel coordinate. Output: 2-class XOR-chequerboard label.
 INPUT_DIM  = 2
 N_CLASS    = 2
 

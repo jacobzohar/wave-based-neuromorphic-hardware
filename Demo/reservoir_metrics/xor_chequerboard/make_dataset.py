@@ -6,7 +6,7 @@ For 16x16 and 32x32 grids, build:
 
 XOR label at pixel (i, j) for scale P:
     label(i, j; P) = ((i // P) + (j // P)) mod 2
-Period-P checkerboard. Class balance = 50% exactly.
+Period-P chequerboard. Class balance = 50% exactly.
 """
 import os
 import numpy as np

@@ -64,8 +64,8 @@ Python `numpy` (and `pandas` for faster CSV reads in `build_cube.py`).
 
 The cubes produced here feed the analyses in `../Demo/`:
 
-- [`../Demo/xor_checkerboard/`](../Demo/xor_checkerboard/) — top-K MI feature selection + LinearSVC readout, compared against MLP / CNN baselines on an XOR-checkerboard task ladder.
-- [`../Demo/kernel_rank_cg/`](../Demo/kernel_rank_cg/) — kernel rank, d95 and participation ratio of the reservoir feature matrix vs spatial coarse-graining.
+- [`../Demo/reservoir_metrics/xor_chequerboard/`](../Demo/reservoir_metrics/xor_chequerboard/) — top-K MI feature selection + LinearSVC readout, compared against MLP / CNN baselines on an XOR-chequerboard task ladder.
+- [`../Demo/reservoir_metrics/kernel_rank_cg/`](../Demo/reservoir_metrics/kernel_rank_cg/) — kernel rank, d95 and participation ratio of the reservoir feature matrix vs spatial coarse-graining.
 
 The cubes themselves are multi-GB and are not bundled — see *Data
 availability* in the top-level [`../README.md`](../README.md).

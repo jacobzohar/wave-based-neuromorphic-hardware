@@ -32,9 +32,11 @@ SWRC/
 │   └── SWRC_MuMax3.ipynb
 └── Demo/                    ← runnable demonstrations of the software (one per manuscript figure)
     ├── README.md
-    ├── 2_3_5_Robotic_output_classification_task/  ← full workflow: dataset → simulator → SVM (Fig. 2e)
-    ├── xor_checkerboard/                          ← SWR + MLP + CNN on the XOR-checkerboard task (Supplementary Fig. 7)
-    └── kernel_rank_cg/                            ← kernel rank / d95 / participation ratio vs spatial coarse-graining (Section S9, Fig. S9.2 + Table S9.1)
+    ├── 2_3_5_Robotic_output_classification_task/      ← full workflow: dataset → simulator → SVM (Fig. 2e)
+    └── reservoir_metrics/                              ← intrinsic-substrate characterisations
+        ├── README.md
+        ├── xor_chequerboard/                              ← SWR + MLP + CNN on the XOR-chequerboard task (Supplementary Fig. 7)
+        └── kernel_rank_cg/                                ← kernel rank / d95 / participation ratio vs spatial coarse-graining (Section S9, Fig. S9.2 + Table S9.1)
 ```
 
 ## System requirements
@@ -133,7 +135,7 @@ bash run_example.sh
 result caches; runs entirely on CPU and does not invoke mumax3:
 
 ```bash
-cd Demo/xor_checkerboard
+cd Demo/reservoir_metrics/xor_chequerboard
 python make_xor_comparison_figure.py
 ```
 
@@ -158,10 +160,10 @@ The terminal also prints a one-line summary, e.g.:
 
 **No-GPU demo** writes a single figure file:
 
-- `Demo/xor_checkerboard/figures/figS7_xor_ladder_comparison.png` —
+- `Demo/reservoir_metrics/xor_chequerboard/figures/figS7_xor_ladder_comparison.png` —
   the Supplementary Fig. 7 panel (balanced accuracy vs FLOPs for the
   spin-wave reservoir, MLP-on-coords, and CNN-on-coords on the
-  XOR-checkerboard task ladder).
+  XOR-chequerboard task ladder).
 
 ### Expected run time for demo on a "normal" desktop computer
 
@@ -207,12 +209,13 @@ analysis at your own cube. The three bundled demos:
   a linear-SVM training + testing script
   (`sklearn.svm.SVC(kernel='linear')`) that produces the Fig. 2e
   comparison panels (`FinalResultsMain`, `SWvsSVMW`, `WWvsSVMvsSW`).
-- [`Demo/xor_checkerboard/`](Demo/xor_checkerboard/) — SWR + MLP + CNN
-  on an XOR-checkerboard task ladder. Generates Supplementary Fig. 7.
-- [`Demo/kernel_rank_cg/`](Demo/kernel_rank_cg/) — kernel rank, d95,
-  and participation ratio of the SWR feature matrix vs spatial
-  coarse-graining. Generates Supplementary Table 2 / Table S9.1 and
-  Fig. S9.2.
+- [`Demo/reservoir_metrics/xor_chequerboard/`](Demo/reservoir_metrics/xor_chequerboard/) —
+  SWR + MLP + CNN on an XOR-chequerboard task ladder. Generates
+  Supplementary Fig. 7.
+- [`Demo/reservoir_metrics/kernel_rank_cg/`](Demo/reservoir_metrics/kernel_rank_cg/) —
+  kernel rank, d95, and participation ratio of the SWR feature matrix
+  vs spatial coarse-graining. Generates Supplementary Table 2 / Table
+  S9.1 and Fig. S9.2.
 
 See each demo's `README.md` for the exact CLI / env-var knobs, the
 bundled inputs, and the data shape it expects.
@@ -225,11 +228,11 @@ caches without the multi-GB `m_z` cubes; they run in seconds on a laptop.
 | Manuscript figure | Command (from repo root) | Output |
 |-------------------|--------------------------|--------|
 | **Fig. 2e** (WW vs Raw SVM vs SWRC training-size sweep) | `cd Demo/2_3_5_Robotic_output_classification_task && python train_test_svm.py` | `figures/FinalResultsMain.png`, `figures/SWvsSVMW.png`, `figures/WWvsSVMvsSW.png` |
-| **Supplementary Fig. 7** (XOR ladder, SWR vs MLP vs CNN) | `cd Demo/xor_checkerboard && python make_xor_comparison_figure.py` | `figures/figS7_xor_ladder_comparison.png` |
-| **Section S9.1** (kernel rank, d95, PR vs spatial CG — display panel) | `cd Demo/kernel_rank_cg && python make_fig_s91.py` | `figures/figS91_kr_pr.png` |
-| **Fig. S9.2** (per-frame spatial rank) | `cd Demo/kernel_rank_cg && python make_fig_spatial.py` | `figures/figS92_spatial_rank.png` |
-| Supporting analysis figs 1–5 (rank, SV spectra, cum. variance, multi-metric rank, CG montage) | `cd Demo/kernel_rank_cg && python make_figures.py` | `figures/fig{1..5}_*.png` |
-| **Table S9.1** / **Supplementary Table 2** (.docx, Windows + MS Office only) | `cd Demo/kernel_rank_cg && python build_docx_s91.py` | `SI_S9_1_Kernel_Rank.docx` |
+| **Supplementary Fig. 7** (XOR ladder, SWR vs MLP vs CNN) | `cd Demo/reservoir_metrics/xor_chequerboard && python make_xor_comparison_figure.py` | `figures/figS7_xor_ladder_comparison.png` |
+| **Section S9.1** (kernel rank, d95, PR vs spatial CG — display panel) | `cd Demo/reservoir_metrics/kernel_rank_cg && python make_fig_s91.py` | `figures/figS91_kr_pr.png` |
+| **Fig. S9.2** (per-frame spatial rank) | `cd Demo/reservoir_metrics/kernel_rank_cg && python make_fig_spatial.py` | `figures/figS92_spatial_rank.png` |
+| Supporting analysis figs 1–5 (rank, SV spectra, cum. variance, multi-metric rank, CG montage) | `cd Demo/reservoir_metrics/kernel_rank_cg && python make_figures.py` | `figures/fig{1..5}_*.png` |
+| **Table S9.1** / **Supplementary Table 2** (.docx, Windows + MS Office only) | `cd Demo/reservoir_metrics/kernel_rank_cg && python build_docx_s91.py` | `SI_S9_1_Kernel_Rank.docx` |
 
 End-to-end regeneration *including* the simulator step (for one demo at a
 time) follows the recipe in each demo's `README.md`. The simulator stage

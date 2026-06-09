@@ -52,7 +52,7 @@ export CUBE_PATH=/path/to/sw_disk_mz_cube.npy   # Windows: $env:CUBE_PATH="..."
 45 mT / 800 MHz spin-wave-disk substrate. The mumax³ source and the
 `(256, 201, 50, 50)` CSV→cube assembler (`build_cube.py`) that produce it live
 at [`../../simulator/`](../../simulator/) — the same substrate analysed in
-the sibling [`../xor_checkerboard/`](../xor_checkerboard/) experiment (at 32×32
+the sibling [`../xor_chequerboard/`](../xor_chequerboard/) experiment (at 32×32
 input resolution). The raw cube is multiple GB and is not bundled; see *Data
 availability* in the top-level README.
 

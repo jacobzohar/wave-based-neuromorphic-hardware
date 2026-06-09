@@ -10,7 +10,7 @@ The four stages and their concrete implementations:
 |---|---|---|
 | 1. Substrate simulation sweep | [Algorithm 1](#algorithm-1--substrate-simulation-sweep-sw_disk_runsweep) | [`simulator/run_sweep.py`](simulator/run_sweep.py) + [`simulator/build_relax_cache.mx3`](simulator/build_relax_cache.mx3) + the embedded mumax³ template |
 | 2. Cube assembly | [Algorithm 2](#algorithm-2--cube-assembly-build_cube) | [`simulator/build_cube.py`](simulator/build_cube.py) |
-| 3. Top-K mutual-information feature readout | [Algorithm 3](#algorithm-3--top-k-mi--linearsvc-readout) | [`examples/minimal_classification/train_minimal.py`](examples/minimal_classification/train_minimal.py) (LOO-CV, N = 4) and [`experiments/xor_checkerboard/top_k_svm_sweep.py`](experiments/xor_checkerboard/top_k_svm_sweep.py) (15-fold CV, N = 1024) |
+| 3. Top-K mutual-information feature readout | [Algorithm 3](#algorithm-3--top-k-mi--linearsvc-readout) | [`examples/minimal_classification/train_minimal.py`](examples/minimal_classification/train_minimal.py) (LOO-CV, N = 4) and [`Demo/reservoir_metrics/xor_chequerboard/top_k_svm_sweep.py`](Demo/reservoir_metrics/xor_chequerboard/top_k_svm_sweep.py) (15-fold CV, N = 1024) |
 | 4. Reservoir dimensionality analysis (kernel rank / d95 / participation ratio) | [Algorithm 4](#algorithm-4--kernel-rank-d95-and-participation-ratio-vs-spatial-coarse-graining) | [`experiments/kernel_rank_cg/kernel_rank_cg.py`](experiments/kernel_rank_cg/kernel_rank_cg.py) |
 
 All numerical constants in the algorithms below are the production defaults
@@ -148,7 +148,7 @@ repeated stratified k-fold (production) cross-validation.
 - `cube ∈ ℝ^{N × F × H × W}` — the assembled `m_z` cube from Algorithm 2.
 - `y ∈ {0, 1}^N` — binary task labels (XOR labels in the included experiments).
 - `K ∈ ℤ⁺` — number of top-MI features to retain (e.g. K = 4 for the minimal
-  example; swept from 1 to ~1000 in the production XOR-checkerboard study).
+  example; swept from 1 to ~1000 in the production XOR-chequerboard study).
 - `B ∈ ℤ⁺` — number of equal-frequency MI bins (default: 2 for binary tasks).
 
 **Output**

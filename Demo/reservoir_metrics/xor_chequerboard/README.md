@@ -1,7 +1,7 @@
-# Spin-wave reservoir vs. MLP / CNN on the XOR-checkerboard task ladder
+# Spin-wave reservoir vs. MLP / CNN on the XOR-chequerboard task ladder
 
 Code and data to reproduce **Supplementary Fig. 7**: a comparison of the
-spin-wave reservoir against MLP and CNN baselines on an XOR-checkerboard task
+spin-wave reservoir against MLP and CNN baselines on an XOR-chequerboard task
 ladder, with the accompanying wavelength-matching and representation-lift
 analyses.
 
@@ -9,9 +9,9 @@ analyses.
 
 ![Supplementary Fig. 7](figures/figS7_xor_ladder_comparison.png)
 
-The figure compares three classifiers on a ladder of XOR-checkerboard
+The figure compares three classifiers on a ladder of XOR-chequerboard
 classification tasks at increasing spatial frequency (`n = 1 … 5`, i.e.
-checkerboard period `P = 16, 8, 4, 2, 1` pixels on a 32×32 grid):
+chequerboard period `P = 16, 8, 4, 2, 1` pixels on a 32×32 grid):
 
 | Curve | What it is |
 |-------|-----------|
@@ -47,9 +47,9 @@ figure (Python 3.13, versions in §4).
 ## 2. Directory contents
 
 ```
-xor_checkerboard/
+xor_chequerboard/
 ├── README.md                       # this file
-├── make_dataset.py                 # [stage 0] build the XOR-checkerboard datasets
+├── make_dataset.py                 # [stage 0] build the XOR-chequerboard datasets
 ├── build_xor_pixel_mi.py           # [stage 1a] per-(pixel,frame) MI of the substrate (SWR feature ranking)
 ├── top_k_svm_sweep.py              # [stage 1b] SW-reservoir top-K LinearSVC readout sweep
 ├── run_mlp_sweep_xor.py            # [stage 2a] MLP-on-coords 48-arch sweep
@@ -139,7 +139,7 @@ the five marked **[fig]**.
 
 | File | Produced by | Contents |
 |------|-------------|----------|
-| `xor_datasets.npz` | `make_dataset.py` | XOR-checkerboard labels + `(x,y)` coord grids, 16×16 and 32×32, all scales |
+| `xor_datasets.npz` | `make_dataset.py` | XOR-chequerboard labels + `(x,y)` coord grids, 16×16 and 32×32, all scales |
 | `topk_svm_16_{drive}.npz` ×5 | `top_k_svm_sweep.py` | SWR LinearSVC bal_acc vs `K` × readout × fold, 16×16, one per drive |
 | `topk_svm_32_45mT_t05.npz` **[fig]** | `top_k_svm_sweep.py` | same, 32×32 (45 mT/800 MHz, t-step 0.5) — the figure's SW curve |
 | `pixel_mi_xor_summary_{grid}_{drive}.npz` ×6 | `build_xor_pixel_mi.py` | per-scale max-over-time MI maps + scalars (summary of the large cube) |
@@ -206,7 +206,7 @@ reproduces without the cubes.
 
 ## 7. Method summary (as run)
 
-- **Task.** XOR checkerboard: `label(i,j;P) = ((⌊i/P⌋ + ⌊j/P⌋) mod 2)`; exact
+- **Task.** XOR chequerboard: `label(i,j;P) = ((⌊i/P⌋ + ⌊j/P⌋) mod 2)`; exact
   50/50 class balance. Grids 16×16 (P∈{1,2,4,8}) and 32×32 (P∈{1,2,4,8,16}).
 - **SW reservoir readout.** Rank substrate `(pixel,frame)` cells by mutual
   information `I(m_z; Y_XOR(P))` (5-bin equal-frequency estimator, Miller–Madow
