@@ -9,6 +9,7 @@ figures without the raw cubes.
 
 | Folder | What it does | Manuscript element |
 |--------|--------------|--------------------|
+| [`water_wave_svm/`](water_wave_svm/) | Linear SVM training+testing on the obstacle-distance datasets; comparison of raw 6-d distance vector vs SWRC feature vector vs the water-wave reservoir lab baseline | Fig. 2e |
 | [`xor_checkerboard/`](xor_checkerboard/) | SWR + MLP + CNN compared on an XOR-checkerboard task ladder (balanced accuracy vs FLOPs) | Supplementary Fig. 7 |
 | [`kernel_rank_cg/`](kernel_rank_cg/) | Kernel rank, d95, participation ratio of the reservoir feature matrix vs spatial coarse-graining | Supp. Table 2 / Table S9.1, Fig. S9.2 |
 

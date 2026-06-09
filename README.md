@@ -34,6 +34,7 @@ SWRC/
 │   └── SWRC_MuMax3.ipynb
 └── experiments/             ← downstream analyses backing the manuscript figures
     ├── README.md
+    ├── water_wave_svm/      ← Raw-SVM vs SWRC vs WWRC training+testing (Fig. 2e)
     ├── xor_checkerboard/    ← SWR + MLP + CNN on the XOR-checkerboard task (Supplementary Fig. 7)
     └── kernel_rank_cg/      ← kernel rank / d95 / participation ratio vs spatial coarse-graining (Section S9, Fig. S9.2 + Table S9.1)
 ```
@@ -201,6 +202,12 @@ the substrate physics in inline Python is in
 argument or `CUBE_PATH` environment variable to redirect the analysis at
 your own cube. Per-experiment instructions:
 
+- [`experiments/water_wave_svm/`](experiments/water_wave_svm/) — trains
+  linear SVMs (`sklearn.svm.SVC(kernel='linear')`) on the
+  obstacle-distance datasets (raw 6-d distance vector vs SWRC feature
+  vector) and compares them against the water-wave reservoir lab
+  baseline. Generates Fig. 2e (`FinalResultsMain`, `SWvsSVMW`,
+  `WWvsSVMvsSW`).
 - [`experiments/xor_checkerboard/`](experiments/xor_checkerboard/) — SWR +
   MLP + CNN on an XOR-checkerboard task ladder. Generates Supplementary
   Fig. 7.
@@ -226,6 +233,7 @@ caches without the multi-GB `m_z` cubes; they run in seconds on a laptop.
 
 | Manuscript figure | Command (from repo root) | Output |
 |-------------------|--------------------------|--------|
+| **Fig. 2e** (WW vs Raw SVM vs SWRC training-size sweep) | `cd experiments/water_wave_svm && python train_test_svm.py` | `figures/FinalResultsMain.png`, `figures/SWvsSVMW.png`, `figures/WWvsSVMvsSW.png` |
 | **Supplementary Fig. 7** (XOR ladder, SWR vs MLP vs CNN) | `cd experiments/xor_checkerboard && python make_xor_comparison_figure.py` | `figures/figS7_xor_ladder_comparison.png` |
 | **Section S9.1** (kernel rank, d95, PR vs spatial CG — display panel) | `cd experiments/kernel_rank_cg && python make_fig_s91.py` | `figures/figS91_kr_pr.png` |
 | **Fig. S9.2** (per-frame spatial rank) | `cd experiments/kernel_rank_cg && python make_fig_spatial.py` | `figures/figS92_spatial_rank.png` |
